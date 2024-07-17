@@ -1,12 +1,12 @@
 
 # Create a VPC
-resource "aws_vpc" "example" {
-  cidr_block = "10.0.0.0/16"
+# resource "aws_vpc" "demo-vpc" {
+#   cidr_block = "10.0.0.0/16"
 
-  tags = {
-    "Name" = "example-vpc"
-  }
-}
+#   tags = {
+#     "Name" = "demo-vpc"
+#   }
+# }
 
 
 # Create a new ssh key pair
@@ -17,21 +17,29 @@ resource "aws_vpc" "example" {
 
 
 # Create a aws_key_pair
-resource "aws_key_pair" "example" {  
+resource "aws_key_pair" "my-key-pair" {  
     key_name = "example-key-pair" 
     public_key = file("./keys/id_rsa.pub")
 
     tags = {
-        Name = "example-key-pair"
+        Name = "my-key-pair"
         }
 }
 
 
 # Create an ec2 instance
-resource "aws_instance" "example" {
+resource "aws_instance" "example1" {
   ami           = "ami-04a81a99f5ec58529"
   instance_type = "t2.micro"
-  key_name = aws_key_pair.example.key_name
+  key_name = aws_key_pair.my-key-pair.key_name
+
+  security_groups = [module.security_group.security_group_id]
+
+#how to use my vpc module here?
+  subnet_id = module.vpc.public_subnets[0]
+
+  associate_public_ip_address = true
+
 
   tags = {
     Name = "example"}
@@ -44,5 +52,5 @@ resource "aws_instance" "example" {
 
 # Output the public IP of the instance
 output "instance_public_ip" {
-  value = aws_instance.example.public_ip
+  value = aws_instance.example1.public_ip
 }
