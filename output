@@ -1,0 +1,7 @@
+digraph {
+	rankdir=RL
+	"aws_instance.example" [label="aws_instance.example" fontname="sans-serif" shape=rect]
+	"aws_key_pair.example" [label="aws_key_pair.example" fontname="sans-serif" shape=rect]
+	"aws_vpc.example" [label="aws_vpc.example" fontname="sans-serif" shape=rect]
+	"aws_instance.example" -> "aws_key_pair.example"
+}
