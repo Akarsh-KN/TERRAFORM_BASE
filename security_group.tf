@@ -10,3 +10,18 @@ module "security_group" {
     egress_rules = ["all-all"]
 }
 
+
+
+#create security group using terraform security group module for the private subnet PHP instance
+module "security_group_php" {
+    source  = "terraform-aws-modules/security-group/aws"
+
+    name = "my-php-sg"
+    description = "Security group for my php instances"
+    vpc_id = module.vpc.vpc_id
+    ingress_cidr_blocks = [module.vpc.vpc_cidr_block]
+
+    ingress_rules = ["http-80-tcp", "ssh-tcp"]
+    egress_rules = ["all-all"]
+
+}

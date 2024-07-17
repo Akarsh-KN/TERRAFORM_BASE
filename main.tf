@@ -54,3 +54,28 @@ resource "aws_instance" "example1" {
 output "instance_public_ip" {
   value = aws_instance.example1.public_ip
 }
+
+
+#create ubuntu instance in private subnet
+resource "aws_instance" "php-instance" {
+  ami           = "ami-04a81a99f5ec58529"
+  instance_type = "t2.micro"
+  key_name = aws_key_pair.my-key-pair.key_name
+
+  security_groups = [module.security_group_php.security_group_id]
+
+  subnet_id = module.vpc.private_subnets[0]
+
+  associate_public_ip_address = false
+
+  tags = {  
+    Name = "php-instance" 
+  }
+}
+
+
+
+# output the private ip of the instance
+output "instance_private_ip" {
+  value = aws_instance.php-instance.private_ip
+}
